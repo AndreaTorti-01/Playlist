@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Playlist</title>
+<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<h1>Welcome to the Home Page</h1>
+	<h2 th:text="${'Nice to see you ' + session.user.nome + session.user.cognome}"></h2>
+	<h3 th:text="${'Here is your playlist' + ...}"></h3>
+	
+	<div class="horDivBox">
+		<div class="songBox" th:each="{...}">
+			<img th:src="{...}">
+			<audio controls>
+				<source src="{...}" type="audio/mpeg">
+			</audio>
+		</div>
+	</div>
+	
+</body>
+</html>

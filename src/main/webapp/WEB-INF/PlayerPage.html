@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Audio Player Page</title>
+<link rel="stylesheet" type="text/css" media="all"
+	th:href="@{/css/app.css}" />
+</head>
+<body>
+	<h1>Welcome to the Player Page</h1>
+	<div class="flexCenterHor">
+		<h2>Song Information</h2>
+		<div th:text="${'Title: ' + songTitle}"></div>
+		<div th:text="${'Author: ' + songAuthor}"></div>
+		<div th:text="${'Album: ' + songAlbum}"></div>
+		<div th:text="${'Genre: ' + songGenre}"></div>
+		<div th:text="${'Year: ' + songAlbumYear}"></div>
+	</div>
+	<audio controls>
+		<source th:src="${'/Playlist/audioPlayer/' + userAndSong + '.mp3'}"
+			type="audio/mpeg">
+	</audio>
+</body>
+</html>

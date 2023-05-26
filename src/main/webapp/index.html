@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Login page</title>
+<link rel="stylesheet" type="text/css" media="all" href="css/app.css"/>
+</head>
+<body>
+	<h1>Welcome to the Playlist website</h1>
+	<form class="indexForm" action="CheckLogin" method="POST">
+		<div class="formPrompt">Login using the form below:</div>
+		<input type="text" name="username" placeholder="Username" required>
+		<input type="password" name="password" placeholder="Password" required>
+		<input type="submit" value="Login">
+		<div class="error" th:text=" ${errorMsg}"></div>
+	</form>
+
+</body>
+</html>

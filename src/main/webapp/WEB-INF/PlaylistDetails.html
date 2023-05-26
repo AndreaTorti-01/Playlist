@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Playlist Page</title>
+<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div class="flexCenterHor">
+		<a class="navButton" th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page > 0 ? page - 1 : 0})}" th:text="Precedenti"></a>
+    	<div th:each="songName: ${playlistSongs}" class="playlistItem">
+    		<a th:text="${songName}" th:href="${'/Playlist/playerPage/' + username + '/' + songName}"></a>
+    	</div>
+		<a class="navButton" th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page < lastPage ? page + 1 : lastPage})}" th:text="Successivi"></a>
+	</div>
+</body>
+</html>
