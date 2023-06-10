@@ -59,6 +59,10 @@ h1, h2 {
 
 .playlistItem {
 	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
 }
 
 .smolText {
@@ -201,6 +205,10 @@ audio {
 
 a {
 	color: white;
+}
+
+.albumCover {
+	width: 9em;
 }
 
 #createPlaylist {

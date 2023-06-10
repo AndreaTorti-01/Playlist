@@ -2,6 +2,7 @@ package controllers;
 
 import beans.User;
 import dao.PlaylistDAO;
+import dao.SongDAO;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ public class GetPlaylistDetails extends HttpServlet {
 	private Connection connection = null;
 	private TemplateEngine templateEngine;
 	private PlaylistDAO playlistDAO;
+	private SongDAO songDAO;
 	int numberOfSongs;
 
 	public GetPlaylistDetails() {
@@ -46,6 +49,7 @@ public class GetPlaylistDetails extends HttpServlet {
 		templateResolver.setSuffix(".html");
 		connection = ConnectionHandler.getConnection(getServletContext());
 		playlistDAO = new PlaylistDAO(connection);
+		songDAO = new SongDAO(connection);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -82,6 +86,18 @@ public class GetPlaylistDetails extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// now get the album name for each song
+		List<String> albumNames = new ArrayList<>();
+		assert playlistSongs != null;
+		for (String ps: playlistSongs) {
+			try {
+				albumNames.add(songDAO.getSongDetails(user.getUsername(), ps).getAlbumName());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		request.setAttribute("playlistSongs", playlistSongs);
 		
@@ -90,6 +106,8 @@ public class GetPlaylistDetails extends HttpServlet {
 		request.setAttribute("id", playlistName);
 		
 		request.setAttribute("lastPage", lastPage);
+
+		request.setAttribute("albumNames", albumNames);
 		
 		try {
 			numberOfSongs = playlistDAO.getSongsNumOfPlaylistOf(user.getUsername(), playlistName);

@@ -2,6 +2,7 @@ package controllers;
 
 import beans.User;
 import dao.PlaylistDAO;
+import dao.SongDAO;
 import org.apache.commons.lang.StringEscapeUtils;
 import utils.ConnectionHandler;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.Serial;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -20,9 +22,11 @@ import java.sql.SQLException;
  */
 @WebServlet("/CreatePlaylist")
 public class CreatePlaylist extends HttpServlet {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 	private PlaylistDAO playlistDAO;
+	private SongDAO songDAO;
 
 	public CreatePlaylist() {
 		super();
@@ -32,6 +36,7 @@ public class CreatePlaylist extends HttpServlet {
 	public void init() throws ServletException {
 		connection = ConnectionHandler.getConnection(getServletContext());
 		playlistDAO = new PlaylistDAO(connection);
+		songDAO = new SongDAO(connection);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -60,10 +65,20 @@ public class CreatePlaylist extends HttpServlet {
 		// get the list of selected songs
 		String[] selectedSongs = request.getParameterValues("checkbox");
 		if (selectedSongs != null) {
+			int albumYear;
+
+			java.util.Date dt = new java.util.Date();
+
+			java.text.SimpleDateFormat sdf =
+					new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			String currentTime = sdf.format(dt);
+
 			// for every song, add it to the playlist
 			for (String song : selectedSongs) {
 				try {
-					playlistDAO.createPlaylist(user.getUsername(), song, playlistName);
+					albumYear = songDAO.getSongDetails(user.getUsername(), song).getAlbumYear();
+					playlistDAO.addSong(user.getUsername(), song, playlistName, albumYear, currentTime);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

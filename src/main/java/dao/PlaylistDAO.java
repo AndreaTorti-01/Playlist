@@ -14,20 +14,22 @@ public class PlaylistDAO {
 		this.connection = connection;
 	}
 
-	public void createPlaylist(String playlistOwner, String playlistSong, String playlistName)
+	public void addSong(String playlistOwner, String playlistSong, String playlistName, int albumYear, String creationDate)
 			throws SQLException {
-		String query = "INSERT INTO playlist (playlistOwner, playlistSong, playlistName) VALUES (?, ?, ?)";
+		String query = "INSERT INTO playlist (playlistOwner, playlistSong, playlistName, albumYear, creationDate) VALUES (?, ?, ?, ?, ?)";
 		PreparedStatement preparedStatement = connection.prepareStatement(query);
 
 		preparedStatement.setString(1, playlistOwner);
 		preparedStatement.setString(2, playlistSong);
 		preparedStatement.setString(3, playlistName);
+		preparedStatement.setInt(4, albumYear);
+		preparedStatement.setString(5, creationDate);
 
 		preparedStatement.executeUpdate();
 	}
-	
+
 	public List<String> getPlaylistsOf(String playlistOwner) throws SQLException {
-		String query = "SELECT DISTINCT playlistName FROM playlist WHERE playlistOwner = ?";
+		String query = "SELECT DISTINCT playlistName, creationDate FROM playlist WHERE playlistOwner = ? ORDER BY creationDate DESC";
 		PreparedStatement preparedStatement = connection.prepareStatement(query);
 
 		preparedStatement.setString(1, playlistOwner);
@@ -45,7 +47,7 @@ public class PlaylistDAO {
 	}
 	
 	public List<String> getSongsOfPlaylistOf(String playlistOwner, String playlistName) throws SQLException {
-		String query = "SELECT playlistSong FROM playlist WHERE playlistOwner = ? AND playlistName = ?";
+		String query = "SELECT playlistSong FROM playlist WHERE playlistOwner = ? AND playlistName = ? ORDER BY albumYear DESC";
 		PreparedStatement preparedStatement = connection.prepareStatement(query);
 
 		preparedStatement.setString(1, playlistOwner);
@@ -79,7 +81,7 @@ public class PlaylistDAO {
 	}
 	
 	public List<String> getFiveSongsAtMost (String playlistOwner, String playlistName, int offset) throws SQLException{
-		String query = "SELECT playlistSong FROM playlist WHERE playlistOwner = ? AND playlistName = ? LIMIT 5 OFFSET ?";
+		String query = "SELECT playlistSong, albumYear FROM playlist WHERE playlistOwner = ? AND playlistName = ? ORDER BY albumYear DESC LIMIT 5 OFFSET ?";
 		PreparedStatement preparedStatement = connection.prepareStatement(query);
 
 		preparedStatement.setString(1, playlistOwner);
