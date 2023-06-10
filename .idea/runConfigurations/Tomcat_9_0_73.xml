@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Tomcat 9.0.73" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.73" ALTERNATIVE_JRE_ENABLED="false">
+  <configuration default="false" name="Tomcat 9.0.73" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" activateToolWindowBeforeRun="false" APPLICATION_SERVER_NAME="Tomcat 9.0.73" ALTERNATIVE_JRE_ENABLED="false">
+    <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
       <artifact name="Playlist:war exploded">
         <settings>
@@ -9,6 +10,7 @@
     </deployment>
     <server-settings>
       <option name="BASE_DIRECTORY_NAME" value="de22ae54-ca3b-4d85-804a-07f635d9b9b2" />
+      <option name="HTTP_PORT" value="8081" />
     </server-settings>
     <predefined_log_file enabled="true" id="Tomcat" />
     <predefined_log_file enabled="true" id="Tomcat Catalina" />

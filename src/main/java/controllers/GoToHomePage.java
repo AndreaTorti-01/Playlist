@@ -1,10 +1,13 @@
 package controllers;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.List;
+import beans.User;
+import dao.PlaylistDAO;
+import dao.SongDAO;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import utils.ConnectionHandler;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,16 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
-import beans.User;
-import dao.PlaylistDAO;
-import dao.SongDAO;
-import utils.ConnectionHandler;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 
 @WebServlet("/Home")
 public class GoToHomePage extends HttpServlet {

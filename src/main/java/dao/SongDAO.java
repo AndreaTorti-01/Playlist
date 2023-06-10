@@ -1,5 +1,7 @@
 package dao;
 
+import beans.Song;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,10 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import beans.Song;
-
 public class SongDAO {
-	private Connection connection;
+	private final Connection connection;
 
 	public SongDAO(Connection connection) {
 		this.connection = connection;
@@ -42,10 +42,7 @@ public class SongDAO {
 
 		// no results, credential check failed, si usa la negazione ! in quanto indica
 		// che nel resultSet non ci sono righe
-		if (!songsWithThisTitle.isBeforeFirst())
-			return false;
-		else
-			return true;
+		return songsWithThisTitle.isBeforeFirst();
 	}
 
 	public List<String> getSongsOf(String owner) throws SQLException {

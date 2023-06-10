@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistDAO {
-	private Connection connection;
+	private final Connection connection;
 
 	public PlaylistDAO(Connection connection) {
 		this.connection = connection;
