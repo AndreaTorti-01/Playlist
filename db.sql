@@ -28,6 +28,8 @@ CREATE TABLE `playlist` (
   `playlistOwner` varchar(45) NOT NULL,
   `playlistSong` varchar(45) NOT NULL,
   `playlistName` varchar(45) NOT NULL,
+  `albumYear` int NOT NULL,
+  `creationDate` datetime NOT NULL,
   PRIMARY KEY (`playlistOwner`,`playlistName`,`playlistSong`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,6 +40,7 @@ CREATE TABLE `playlist` (
 
 LOCK TABLES `playlist` WRITE;
 /*!40000 ALTER TABLE `playlist` DISABLE KEYS */;
+INSERT INTO `playlist` VALUES ('user','ex2','234',1021,'2023-06-21 14:42:55'),('user','ex3','234',2000,'2023-06-21 14:42:55'),('user','ex4','234',1000,'2023-06-21 14:42:55'),('user','ex2','compilation',1021,'2023-06-11 11:00:02'),('user','ex3','compilation',2000,'2023-06-11 11:00:02'),('user','ex4','compilation',1000,'2023-06-11 11:00:02'),('user','ex5','compilation',1020,'2023-06-11 11:00:02'),('user','example','compilation',2000,'2023-06-11 11:00:02'),('user','file_example_MP3_700KB','compilation',2000,'2023-06-11 11:00:02'),('user','ex3','zzz345',2000,'2023-06-21 14:43:07'),('user','ex4','zzz345',1000,'2023-06-21 14:43:07'),('user','ex5','zzz345',1020,'2023-06-21 14:43:07');
 /*!40000 ALTER TABLE `playlist` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,6 +68,7 @@ CREATE TABLE `songs` (
 
 LOCK TABLES `songs` WRITE;
 /*!40000 ALTER TABLE `songs` DISABLE KEYS */;
+INSERT INTO `songs` VALUES ('ex2','user','dsi','okes','blues',1021),('ex3','user','gij','oisdoi','blues',2000),('ex4','user','sifdj','oifg','blues',1000),('ex5','user','ijery','oijdg','blues',1020),('example','user','gjn','gwoi','blues',2000),('file_example_MP3_700KB','user','oijsd','ois','jazz',2000);
 /*!40000 ALTER TABLE `songs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,4 +107,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-10 13:35:36
+-- Dump completed on 2023-06-21 14:44:37
