@@ -1,74 +1,53 @@
 package controllers;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 
 @WebServlet("/audioPlayer/*")
 public class AudioPlayer extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	public AudioPlayer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    public AudioPlayer() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public void init() throws ServletException {
-	}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// If the user is not logged in (not present in session) redirect to the login
-		String loginpath = getServletContext().getContextPath() + "/index.html";
-		HttpSession session = request.getSession();
-		if (session.isNew() || session.getAttribute("user") == null) {
-			response.sendRedirect(loginpath);
-			return;
-		}
+        String audioFileName = request.getPathInfo().substring(1); // Extract the file name from the request URL
+        String audioFilePath = "C:/userSongs/" + audioFileName;
 
-		String audioFileName = request.getPathInfo().substring(1); // Extract the file name from the request URL
-		String audioFilePath = "C:/userSongs/" + audioFileName;
+        File audioFile = new File(audioFilePath);
 
-		File audioFile = new File(audioFilePath);
+        if (audioFile.exists()) {
+            byte[] audioData;
 
-		if (audioFile.exists()) {
-			byte[] audioData;
+            try (FileInputStream fileInputStream = new FileInputStream(audioFile);
+                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 
-			try (FileInputStream fileInputStream = new FileInputStream(audioFile);
-					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
 
-				byte[] buffer = new byte[4096];
-				int bytesRead;
+                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                }
 
-				while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-					byteArrayOutputStream.write(buffer, 0, bytesRead);
-				}
+                audioData = byteArrayOutputStream.toByteArray();
+            }
 
-				audioData = byteArrayOutputStream.toByteArray();
-			}
+            response.setContentType("audio/mpeg"); // Set the appropriate content type based on your audio file format
+            response.setContentLength(audioData.length);
 
-			response.setContentType("audio/mpeg"); // Set the appropriate content type based on your audio file format
-			response.setContentLength(audioData.length);
+            try (OutputStream outputStream = response.getOutputStream()) {
+                outputStream.write(audioData);
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
 
-			try (OutputStream outputStream = response.getOutputStream()) {
-				outputStream.write(audioData);
-			}
-		} else {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-		}
-
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
-
+    }
 }

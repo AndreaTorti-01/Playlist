@@ -8,95 +8,119 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistDAO {
-	private final Connection connection;
+    private final Connection connection;
 
-	public PlaylistDAO(Connection connection) {
-		this.connection = connection;
-	}
+    public PlaylistDAO(Connection connection) {
+        this.connection = connection;
+    }
 
-	public void addSong(String playlistOwner, String playlistSong, String playlistName, int albumYear, String creationDate)
-			throws SQLException {
-		String query = "INSERT INTO playlist (playlistOwner, playlistSong, playlistName, albumYear, creationDate) VALUES (?, ?, ?, ?, ?)";
-		PreparedStatement preparedStatement = connection.prepareStatement(query);
+    public void createPlaylist(String playlistOwner, List<String> playlistSongs, String playlistName, List<Integer> albumYears, String creationDate) throws SQLException {
+        connection.setAutoCommit(false); // transaction block start
 
-		preparedStatement.setString(1, playlistOwner);
-		preparedStatement.setString(2, playlistSong);
-		preparedStatement.setString(3, playlistName);
-		preparedStatement.setInt(4, albumYear);
-		preparedStatement.setString(5, creationDate);
+        String query = "INSERT INTO playlist (playlistOwner, playlistSong, playlistName, albumYear, creationDate, songIndexJs) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = null;
 
-		preparedStatement.executeUpdate();
-	}
+        try {
 
-	public List<String> getPlaylistsOf(String playlistOwner) throws SQLException {
-		String query = "SELECT DISTINCT playlistName, creationDate FROM playlist WHERE playlistOwner = ? ORDER BY creationDate DESC";
-		PreparedStatement preparedStatement = connection.prepareStatement(query);
+            // insert every song in the playlist
+            for (int i = 0; i < playlistSongs.size(); i++) {
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setString(1, playlistOwner);
+                preparedStatement.setString(2, playlistSongs.get(i));
+                preparedStatement.setString(3, playlistName);
+                preparedStatement.setInt(4, albumYears.get(i));
+                preparedStatement.setString(5, creationDate);
+                preparedStatement.setInt(6, i);
 
-		preparedStatement.setString(1, playlistOwner);
+                preparedStatement.executeUpdate();
 
-		ResultSet res = preparedStatement.executeQuery();
-		
-		List<String> ret = new ArrayList<>();
-		String name;
-		while (res.next()) {
-		    name = res.getString("playlistName");
-		    ret.add(name);
-		}
-		
-		return ret;
-	}
-	
-	public List<String> getSongsOfPlaylistOf(String playlistOwner, String playlistName) throws SQLException {
-		String query = "SELECT playlistSong FROM playlist WHERE playlistOwner = ? AND playlistName = ? ORDER BY albumYear DESC";
-		PreparedStatement preparedStatement = connection.prepareStatement(query);
+                connection.commit();
+            }
 
-		preparedStatement.setString(1, playlistOwner);
-		preparedStatement.setString(2, playlistName);
+        } catch (SQLException e) {
+            connection.rollback(); // transaction block abort
+            System.out.println("Errore nella creazione della playlist");
+        } finally {
+            connection.setAutoCommit(true); // transaction block end
+            if (preparedStatement != null)
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
 
-		ResultSet res = preparedStatement.executeQuery();
-		
-		List<String> ret = new ArrayList<>();
-		String name;
-		while (res.next()) {
-		    name = res.getString("playlistSong");
-		    ret.add(name);
-		}
-		
-		return ret;
-	}
-	
-	public int getSongsNumOfPlaylistOf (String playlistOwner, String playlistName) throws SQLException {
-		String query = "SELECT COUNT(*) playlistSong FROM playlist WHERE playlistOwner = ? AND playlistName = ?";
-		PreparedStatement preparedStatement = connection.prepareStatement(query);
-		preparedStatement.setString(1, playlistOwner);
-		preparedStatement.setString(2, playlistName);
+    }
 
-		ResultSet res = preparedStatement.executeQuery();
-		int num = 0;
-		while (res.next()) {
-			num = res.getInt(1);
-		}
-		
-		return num;
-	}
-	
-	public List<String> getFiveSongsAtMost (String playlistOwner, String playlistName, int offset) throws SQLException{
-		String query = "SELECT playlistSong, albumYear FROM playlist WHERE playlistOwner = ? AND playlistName = ? ORDER BY albumYear DESC LIMIT 5 OFFSET ?";
-		PreparedStatement preparedStatement = connection.prepareStatement(query);
+    public List<String> getPlaylistsOf(String playlistOwner) throws SQLException {
+        String query = "SELECT DISTINCT playlistName, creationDate FROM playlist WHERE playlistOwner = ? ORDER BY creationDate DESC";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-		preparedStatement.setString(1, playlistOwner);
-		preparedStatement.setString(2, playlistName);
-		preparedStatement.setInt(3, offset);
+        preparedStatement.setString(1, playlistOwner);
 
-		ResultSet res = preparedStatement.executeQuery();
-		List<String> ret = new ArrayList<>();
-		String name;
-		
-		while (res.next()) {
-			name = res.getString("playlistSong");
-		    ret.add(name);
-		}
-		return ret;
-	}
-	
+        ResultSet res = preparedStatement.executeQuery();
+
+        List<String> ret = new ArrayList<>();
+        String name;
+        while (res.next()) {
+            name = res.getString("playlistName");
+            ret.add(name);
+        }
+
+        return ret;
+    }
+
+    public int getSongsNumOfPlaylistOf(String playlistOwner, String playlistName) throws SQLException {
+        String query = "SELECT COUNT(*) playlistSong FROM playlist WHERE playlistOwner = ? AND playlistName = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, playlistOwner);
+        preparedStatement.setString(2, playlistName);
+
+        ResultSet res = preparedStatement.executeQuery();
+        int num = 0;
+        while (res.next()) {
+            num = res.getInt(1);
+        }
+
+        return num;
+    }
+
+    public List<String> getSongsOfPlaylistOf(String playlistOwner, String playlistName) throws SQLException {
+        String query = "SELECT playlistSong, albumYear FROM playlist WHERE playlistOwner = ? AND playlistName = ? ORDER BY albumYear DESC";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        preparedStatement.setString(1, playlistOwner);
+        preparedStatement.setString(2, playlistName);
+
+        ResultSet res = preparedStatement.executeQuery();
+
+        List<String> ret = new ArrayList<>();
+        String name;
+        while (res.next()) {
+            name = res.getString("playlistSong");
+            ret.add(name);
+        }
+
+        return ret;
+    }
+
+    public List<String> getFiveSongsAtMost(String playlistOwner, String playlistName, int offset) throws SQLException {
+        String query = "SELECT playlistSong, albumYear FROM playlist WHERE playlistOwner = ? AND playlistName = ? ORDER BY albumYear DESC LIMIT 5 OFFSET ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        preparedStatement.setString(1, playlistOwner);
+        preparedStatement.setString(2, playlistName);
+        preparedStatement.setInt(3, offset);
+
+        ResultSet res = preparedStatement.executeQuery();
+        List<String> ret = new ArrayList<>();
+        String name;
+
+        while (res.next()) {
+            name = res.getString("playlistSong");
+            ret.add(name);
+        }
+        return ret;
+    }
+
 }

@@ -21,7 +21,6 @@ import java.sql.SQLException;
 
 @WebServlet("/CheckLogin")
 public class CheckLogin extends HttpServlet {
-    private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
@@ -43,11 +42,11 @@ public class CheckLogin extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
         // obtain and escape params
-        String usrn = null;
-        String pwd = null;
+        String usrn;
+        String pwd;
 
         try {
             usrn = StringEscapeUtils.escapeJava(request.getParameter("username"));
@@ -65,7 +64,7 @@ public class CheckLogin extends HttpServlet {
 
         // query db to authenticate for user
         UserDAO userDao = new UserDAO(connection);
-        User user = null;
+        User user;
         try {
             // assegna all'oggetto user i campi recuperati eseguendo la query tramite il DAO
             user = userDao.checkCredentials(usrn, pwd);
