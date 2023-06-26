@@ -14,19 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-@WebServlet("/CreatePlaylist")
-public class CreatePlaylist extends HttpServlet {
+@WebServlet("/AddSong")
+public class AddSong extends HttpServlet {
     private Connection connection = null;
     private PlaylistDAO playlistDAO;
     private SongDAO songDAO;
 
-    public CreatePlaylist() {
+    public AddSong() {
         super();
-
     }
 
     public void init() throws ServletException {
@@ -40,33 +36,28 @@ public class CreatePlaylist extends HttpServlet {
         // If the user is logged in correctly then set the user attribute
         User user = (User) request.getSession().getAttribute("user");
 
-        // get the playlist name from the post request
-        String playlistName = StringEscapeUtils.escapeJava(request.getParameter("playlistName"));
+        // get the playlist name from the request url parameter called id
+        String playlistName = StringEscapeUtils.escapeJava(request.getParameter("id"));
 
         if (playlistName.isEmpty()) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No name given");
             return;
         }
 
-        // get the list of selected songs
-        String[] selectedSongsTemp = request.getParameterValues("checkbox");
-        List<String> selectedSongs = Arrays.asList(selectedSongsTemp);
-        if (!selectedSongs.isEmpty()) {
-            List<Integer> albumYears = new ArrayList<>();
-
-            java.util.Date dt = new java.util.Date();
-
-            java.text.SimpleDateFormat sdf =
-                    new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            String currentTime = sdf.format(dt);
-
-            // create the playlist
+        // get the selected song as the newSong request parameter
+        String newSong = StringEscapeUtils.escapeJava(request.getParameter("newSong"));
+        if (!newSong.isEmpty()) {
+            int albumYear;
             try {
-                for (String song : selectedSongs) {
-                    albumYears.add(songDAO.getSongDetails(user.getUsername(), song).getAlbumYear());
-                }
-                playlistDAO.createPlaylist(user.getUsername(), selectedSongs, playlistName, albumYears, currentTime);
+                albumYear = songDAO.getSongDetails(user.getUsername(), newSong).getAlbumYear();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            // add to the playlist if not already present
+            try {
+                if (!playlistDAO.getSongsOfPlaylistOf(user.getUsername(), playlistName).contains(newSong))
+                    playlistDAO.addSong(user.getUsername(), playlistName, newSong, albumYear);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -76,9 +67,8 @@ public class CreatePlaylist extends HttpServlet {
             return;
         }
 
-        // return the user to the right view
-        String ctxpath = getServletContext().getContextPath();
-        String path = ctxpath + "/Home";
+        // return the user to the view he came from
+        String path = getServletContext().getContextPath() + "/GetPlaylistDetails?id=" + playlistName + "&page=0";
         response.sendRedirect(path);
     }
 

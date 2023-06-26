@@ -66,14 +66,12 @@ public class GetPlaylistDetails extends HttpServlet {
         try {
             lastPage = playlistDAO.getSongsNumOfPlaylistOf(user.getUsername(), playlistName) / 5;
         } catch (SQLException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         List<String> playlistSongs = null;
         try {
             playlistSongs = playlistDAO.getFiveSongsAtMost(user.getUsername(), playlistName, offset);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -84,7 +82,6 @@ public class GetPlaylistDetails extends HttpServlet {
             try {
                 albumNames.add(songDAO.getSongDetails(user.getUsername(), ps).getAlbumName());
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -102,9 +99,17 @@ public class GetPlaylistDetails extends HttpServlet {
         try {
             numberOfSongs = playlistDAO.getSongsNumOfPlaylistOf(user.getUsername(), playlistName);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        List<String> allUserSongs = null;
+        try {
+            allUserSongs = songDAO.getSongsOf(user.getUsername());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        request.setAttribute("allUserSongs", allUserSongs);
 
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());

@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Playlist Page</title>
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
     <link media="all" rel="stylesheet" th:href="@{/css/app.css}" type="text/css"/>
-    <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
-<div class="flexCenterHor">
+<table>
     <a class="navButton"
        th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page > 0 ? page - 1 : 0})}"
        th:if="${page != 0}" th:text="Precedenti"></a>
-    <div class="playlistItem" th:each="songName, iterStat: ${playlistSongs}">
-        <img class="albumCover"
-             th:src="${'/Playlist/cover/' + username + '/' + albumNames.get(iterStat.index) + '.jpg'}"/>
-        <a th:href="${'/Playlist/playerPage/' + username + '/' + songName}" th:text="${songName}"></a>
-    </div>
+    <tr class="flexCenterHor">
+        <td class="playlistItem" th:each="songName, iterStat: ${playlistSongs}">
+            <img class="albumCover"
+                 th:src="${'/Playlist/cover/' + username + '/' + albumNames.get(iterStat.index) + '.jpg'}"/>
+            <a th:href="${'/Playlist/playerPage/' + username + '/' + songName}" th:text="${songName}"></a>
+        </td>
+    </tr>
     <a class="navButton"
        th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page < lastPage ? page + 1 : lastPage})}"
        th:if="${page != lastPage}" th:text="Successivi"></a>
-</div>
+</table>
+<form method="post" style="max-height: 20em" th:action="${'AddSong?id=' + #request.getParameter('id')}">
+    <select name="newSong" required>
+        <option disabled selected value="">Select Song to add</option>
+        <option th:each="song: ${allUserSongs}" th:text="${song}" th:value="${song}"></option>
+    </select>
+    <input type="submit" value="Add Song!">
+</form>
 </body>
 </html>

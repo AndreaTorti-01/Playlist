@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 @WebServlet("/CheckLogin")
 public class CheckLogin extends HttpServlet {
+    UserDAO userDao;
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
@@ -39,6 +40,7 @@ public class CheckLogin extends HttpServlet {
         this.templateEngine = new TemplateEngine();
         this.templateEngine.setTemplateResolver(templateResolver);
         templateResolver.setSuffix(".html");
+        userDao = new UserDAO(connection);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -63,7 +65,6 @@ public class CheckLogin extends HttpServlet {
         }
 
         // query db to authenticate for user
-        UserDAO userDao = new UserDAO(connection);
         User user;
         try {
             // assegna all'oggetto user i campi recuperati eseguendo la query tramite il DAO

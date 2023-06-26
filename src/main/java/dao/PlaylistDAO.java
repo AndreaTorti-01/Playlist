@@ -123,4 +123,47 @@ public class PlaylistDAO {
         return ret;
     }
 
+    public int getPlaylistNextFreeIndex(String playlistOwner, String playlistName) throws SQLException {
+        String query = "SELECT MAX(songIndexJs) FROM playlist WHERE playlistOwner = ? AND playlistName = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, playlistOwner);
+        preparedStatement.setString(2, playlistName);
+
+        ResultSet res = preparedStatement.executeQuery();
+        int index = 0;
+        while (res.next()) {
+            index = res.getInt(1);
+        }
+
+        return index + 1;
+    }
+
+    public String getPlaylistDate(String playlistOwner, String playlistName) throws SQLException {
+        String query = "SELECT creationDate FROM playlist WHERE playlistOwner = ? AND playlistName = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, playlistOwner);
+        preparedStatement.setString(2, playlistName);
+
+        ResultSet res = preparedStatement.executeQuery();
+        String date = "";
+        while (res.next()) {
+            date = res.getString(1);
+        }
+
+        return date;
+    }
+
+    public void addSong(String username, String playlistName, String newSong, int albumYear) throws SQLException {
+        String query = "INSERT INTO playlist (playlistOwner, playlistSong, playlistName, albumYear, creationDate, songIndexJs) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        preparedStatement.setString(1, username);
+        preparedStatement.setString(2, newSong);
+        preparedStatement.setString(3, playlistName);
+        preparedStatement.setInt(4, albumYear);
+        preparedStatement.setString(5, getPlaylistDate(username, playlistName));
+        preparedStatement.setInt(6, getPlaylistNextFreeIndex(username, playlistName));
+
+        preparedStatement.executeUpdate();
+    }
 }
