@@ -1,70 +1,72 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Home Page</title>
-<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/app.css}"/>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <link media="all" rel="stylesheet" th:href="@{/css/app.css}" type="text/css"/>
+    <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
-	<h1>Welcome to the Home Page</h1>
-	<h2 th:text="${'Nice to see you ' + session.user.nome + ' '}"></h2>
-	
-	<div class="threeColumns">
-		<div class="playlists">
-		<div>Here are all your playlists</div>
-			<a th:each="playlist: ${userPlaylists}" th:text="${playlist}" th:href="@{/GetPlaylistDetails?id={idv}&page=0(idv=${playlist})}"></a>
-		</div>
-		
-		
-		<form action="UploadSong" enctype="multipart/form-data" method="POST">
-			<div class="formPrompt">Use this form to upload a new song</div>
-			<div class="horDivBox">
-				<div class="smolText">Upload the song audio file: </div>
-				<input type="file" name="songFile" accept="audio/mpeg" required>
-			</div>
-			
-			<select name="genre" required>
-				<option value="" disabled selected>Select Genre</option>
-	            <option value="rock">Rock</option>
-	            <option value="blues">Blues</option>
-	            <option value="jazz">Jazz</option>
-	         </select>
-	         
-			<input type="text" name="author" placeholder="Author Name" required>
-			<input type="text" name="album" placeholder="Album Title" required>
-			<input type="number" name="albumYear" placeholder="Publication Year" min="1000" th:max="${currentYear}" required>
-			<div class="horDivBox">
-				<div class="smolText">Upload the album cover image: </div>
-	    		<input type="file" name="imageFile" accept="image/*" required>
-	    	</div>
-			<!-- another way of doing it... -->
-			<!-- <input type="number" name="albumYear" placeholder="Publication Year" min="1000" th:max="${#dates.format(#dates.createNow(), 'yyyy')}" required> -->
-			<input type="submit" value="Upload">
-		</form>
-		
-		<form action="CreatePlaylist" method="POST" id="createPlaylist">
-			<div class="formPrompt">Use this form to create a new playlist</div>
-			<input type="text" name="playlistName" placeholder="Playlist Name" required>
-			<div th:each="song, songIndex: ${userSongs}" class="songsInputListItem">
-				<input type="checkbox" th:id="'checkbox' + ${songIndex.index}" name="checkbox" th:value="${song}">
-				<label th:for="'checkbox' + ${songIndex.index}" th:text="${song}"></label>
-			</div>
-			
-			<!--  
-			<label for="dropdown">Select your choices:</label>
-	        <select id="dropdown" name="choices[]" multiple required>
-				<option th:each="song, songIndex: ${userSongs}" th:value="${song}" th:text="${song}"></option>
-			</select>
-			-->
-			
-			
-			<input type="submit" value="Create!">
-			
-		</form>
-		
-		
-		
-	</div>
-	
+<h1>Welcome to the Home Page</h1>
+<h2 th:text="${'Nice to see you ' + session.user.nome + ' '}"></h2>
+
+<div class="threeColumns">
+    <div class="playlists">
+        <div>Here are all your playlists</div>
+        <a th:each="playlist: ${userPlaylists}" th:href="@{/GetPlaylistDetails?id={idv}&page=0(idv=${playlist})}"
+           th:text="${playlist}"></a>
+    </div>
+
+
+    <form action="UploadSong" enctype="multipart/form-data" method="POST">
+        <div class="formPrompt">Use this form to upload a new song</div>
+        <div class="horDivBox">
+            <div class="smolText">Upload the song audio file:</div>
+            <input accept="audio/mpeg" name="songFile" required type="file">
+        </div>
+
+        <select name="genre" required>
+            <option disabled selected value="">Select Genre</option>
+            <option value="rock">Rock</option>
+            <option value="blues">Blues</option>
+            <option value="jazz">Jazz</option>
+        </select>
+
+        <input name="author" placeholder="Author Name" required type="text">
+        <input name="album" placeholder="Album Title" required type="text">
+        <input min="1000" name="albumYear" placeholder="Publication Year" required th:max="${currentYear}"
+               type="number">
+        <div class="horDivBox">
+            <div class="smolText">Upload the album cover image:</div>
+            <input accept="image/*" name="imageFile" required type="file">
+        </div>
+        <!-- another way of doing it... -->
+        <!-- <input type="number" name="albumYear" placeholder="Publication Year" min="1000" th:max="${#dates.format(#dates.createNow(), 'yyyy')}" required> -->
+        <input type="submit" value="Upload">
+    </form>
+
+    <form action="CreatePlaylist" id="createPlaylist" method="POST">
+        <div class="formPrompt">Use this form to create a new playlist</div>
+        <input name="playlistName" placeholder="Playlist Name" required type="text">
+        <div class="songsInputListItem" th:each="song, songIndex: ${userSongs}">
+            <input name="checkbox" th:id="'checkbox' + ${songIndex.index}" th:value="${song}" type="checkbox">
+            <label th:for="'checkbox' + ${songIndex.index}" th:text="${song}"></label>
+        </div>
+
+        <!--
+        <label for="dropdown">Select your choices:</label>
+        <select id="dropdown" name="choices[]" multiple required>
+            <option th:each="song, songIndex: ${userSongs}" th:value="${song}" th:text="${song}"></option>
+        </select>
+        -->
+
+
+        <input type="submit" value="Create!">
+
+    </form>
+
+
+</div>
+
 </body>
 </html>

@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Playlist Page</title>
-<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/app.css}"/>
+    <meta charset="UTF-8">
+    <title>Playlist Page</title>
+    <link media="all" rel="stylesheet" th:href="@{/css/app.css}" type="text/css"/>
+    <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 </head>
 <body>
-	<div class="flexCenterHor">
-		<a class="navButton" th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page > 0 ? page - 1 : 0})}" th:text="Precedenti" th:if="${page != 0}"></a>
-    	<div th:each="songName, iterStat: ${playlistSongs}" class="playlistItem">
-			<img th:src="${'/Playlist/cover/' + username + '/' + albumNames.get(iterStat.index) + '.jpg'}" class="albumCover"/>
-    		<a th:text="${songName}" th:href="${'/Playlist/playerPage/' + username + '/' + songName}"></a>
-    	</div>
-		<a class="navButton" th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page < lastPage ? page + 1 : lastPage})}" th:text="Successivi" th:if="${page != lastPage}"></a>
-	</div>
+<div class="flexCenterHor">
+    <a class="navButton"
+       th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page > 0 ? page - 1 : 0})}"
+       th:if="${page != 0}" th:text="Precedenti"></a>
+    <div class="playlistItem" th:each="songName, iterStat: ${playlistSongs}">
+        <img class="albumCover"
+             th:src="${'/Playlist/cover/' + username + '/' + albumNames.get(iterStat.index) + '.jpg'}"/>
+        <a th:href="${'/Playlist/playerPage/' + username + '/' + songName}" th:text="${songName}"></a>
+    </div>
+    <a class="navButton"
+       th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page < lastPage ? page + 1 : lastPage})}"
+       th:if="${page != lastPage}" th:text="Successivi"></a>
+</div>
 </body>
 </html>
