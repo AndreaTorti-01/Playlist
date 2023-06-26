@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Serial;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,8 +23,6 @@ import java.util.List;
  */
 @WebServlet("/CreatePlaylist")
 public class CreatePlaylist extends HttpServlet {
-    @Serial
-    private static final long serialVersionUID = 1L;
     private Connection connection = null;
     private PlaylistDAO playlistDAO;
     private SongDAO songDAO;
