@@ -50,8 +50,8 @@ public class CreatePlaylist extends HttpServlet {
 
         // get the list of selected songs
         String[] selectedSongsTemp = request.getParameterValues("checkbox");
-        List<String> selectedSongs = Arrays.asList(selectedSongsTemp);
-        if (!selectedSongs.isEmpty()) {
+        if (selectedSongsTemp != null) {
+            List<String> selectedSongs = Arrays.asList(selectedSongsTemp);
             List<Integer> albumYears = new ArrayList<>();
 
             java.util.Date dt = new java.util.Date();
@@ -70,10 +70,6 @@ public class CreatePlaylist extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            // no songs selected
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No songs selected");
-            return;
         }
 
         // return the user to the right view

@@ -5,7 +5,6 @@ import dao.SongDAO;
 import org.apache.commons.lang.StringEscapeUtils;
 import utils.ConnectionHandler;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -112,7 +109,6 @@ public class CreateSong extends HttpServlet {
                 return;
             }
         } catch (SQLException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
 
@@ -122,25 +118,24 @@ public class CreateSong extends HttpServlet {
             return;
         }
 
-        // Convert the uploaded image to JPG format and save it
-        try (InputStream input = imageFilePart.getInputStream()) {
-            BufferedImage image = ImageIO.read(input);
-            if (image != null) {
-                ImageIO.write(image, "jpg", imageFilePath.toFile());
-            }
+        // upload the image to imageFilePath in its original format
+        try (InputStream fileContent = imageFilePart.getInputStream()) {
+            Files.copy(fileContent, imageFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        // save the audio file
-        File file = new File(filePath);
+        // upload the song to filePath in its original format
         try (InputStream fileContent = songFilePart.getInputStream()) {
-            Files.copy(fileContent, file.toPath());
+            Files.copy(fileContent, Paths.get(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         // upload the other song data
         try {
             songDAO.uploadData(title, owner, author, album, genre, albumYear);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
