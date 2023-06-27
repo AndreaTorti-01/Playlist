@@ -31,7 +31,8 @@ CREATE TABLE `playlist` (
   `albumYear` int NOT NULL,
   `creationDate` datetime NOT NULL,
   `songIndexJs` int NOT NULL,
-  PRIMARY KEY (`playlistOwner`,`playlistName`,`playlistSong`)
+  PRIMARY KEY (`playlistOwner`,`playlistSong`,`albumYear`,`playlistName`),
+  CONSTRAINT `SongLink` FOREIGN KEY (`playlistOwner`, `playlistSong`, `albumYear`) REFERENCES `songs` (`owner`, `title`, `albumYear`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -58,7 +59,8 @@ CREATE TABLE `songs` (
   `album` varchar(45) NOT NULL,
   `genre` varchar(45) NOT NULL,
   `albumYear` int NOT NULL,
-  PRIMARY KEY (`title`,`owner`)
+  PRIMARY KEY (`owner`,`title`,`albumYear`),
+  CONSTRAINT `UserLink` FOREIGN KEY (`owner`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -106,4 +108,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-26 16:42:21
+-- Dump completed on 2023-06-27 12:49:29
