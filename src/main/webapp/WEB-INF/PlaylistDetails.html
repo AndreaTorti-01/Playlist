@@ -10,21 +10,23 @@
 <div class="error" th:if="${numberOfSongs == 0}">
     <p>La playlist non contiene ancora brani musicali</p>
 </div>
-<a class="navButton"
-   th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page > 0 ? page - 1 : 0})}"
-   th:if="${page != 0}" th:text="Precedenti"></a>
-<table>
-    <tr class="flexCenterHor">
-        <td class="playlistItem" th:each="songName, iterStat: ${playlistSongs}">
-            <img class="albumCover"
-                 th:src="${'/Playlist/cover/' + username + '/' + albumNames.get(iterStat.index) + '.jpg'}"/>
-            <a th:href="${'/Playlist/playerPage/' + username + '/' + songName}" th:text="${songName}"></a>
-        </td>
-    </tr>
-</table>
-<a class="navButton"
-   th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page < lastPage ? page + 1 : lastPage})}"
-   th:if="${page != lastPage}" th:text="Successivi"></a>
+<div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+    <a class="navButton"
+       th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page > 0 ? page - 1 : 0})}"
+       th:if="${page != 0}" th:text="Precedenti"></a>
+    <table>
+        <tr class="flexCenterHor">
+            <td class="playlistItem" th:each="songName, iterStat: ${playlistSongs}">
+                <img class="albumCover"
+                     th:src="${'/Playlist/cover/' + username + '/' + albumNames.get(iterStat.index) + '.jpg'}"/>
+                <a th:href="${'/Playlist/playerPage/' + username + '/' + songName}" th:text="${songName}"></a>
+            </td>
+        </tr>
+    </table>
+    <a class="navButton"
+       th:href="@{/GetPlaylistDetails?id={idv}&page={pagev}(idv=${id}, pagev=${page < lastPage ? page + 1 : lastPage})}"
+       th:if="${page != lastPage}" th:text="Successivi"></a>
+</div>
 <form method="post" style="max-height: 20em" th:action="${'AddSong?id=' + #request.getParameter('id')}">
     <select name="newSong" required>
         <option disabled selected value="">Select Song to add</option>
