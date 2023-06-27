@@ -21,7 +21,7 @@ import java.sql.SQLException;
 
 @WebServlet("/CheckLogin")
 public class CheckLogin extends HttpServlet {
-    UserDAO userDao;
+    private UserDAO userDao;
     private Connection connection = null;
     private TemplateEngine templateEngine;
 
