@@ -18,9 +18,18 @@ public class CoverServlet extends HttpServlet {
             throws IOException {
 
         String imageFileName = request.getPathInfo().substring(1); // Extract the file name from the request URL
-        String audioFilePath = "C:/userSongs/" + imageFileName;
 
-        File imageFile = new File(audioFilePath);
+        if (imageFileName.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to upload cover");
+        }
+
+        if (imageFileName.contains("%20")) {
+            imageFileName = imageFileName.replace("%20", " ");
+        }
+
+        String imageFilePath = "C:/userSongs/" + imageFileName;
+
+        File imageFile = new File(imageFilePath);
 
         if (imageFile.exists()) {
             byte[] imageData;

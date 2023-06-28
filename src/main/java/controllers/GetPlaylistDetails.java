@@ -27,14 +27,12 @@ import java.util.List;
  */
 @WebServlet("/GetPlaylistDetails")
 public class GetPlaylistDetails extends HttpServlet {
-    int numberOfSongs;
     private TemplateEngine templateEngine;
     private PlaylistDAO playlistDAO;
     private SongDAO songDAO;
 
     public GetPlaylistDetails() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public void init() throws ServletException {
@@ -61,18 +59,17 @@ public class GetPlaylistDetails extends HttpServlet {
 
         playlistName = StringEscapeUtils.escapeJava(request.getParameter("id"));
 
+        // Gets number of songs and songs of the playlist
         int lastPage = 0;
-        // Gets number of songs
+        List<String> playlistSongs = null;
+        int numberOfSongs = 0;
         try {
-            lastPage = playlistDAO.getSongsNumOfPlaylistOf(user.getUsername(), playlistName) / 5;
+            numberOfSongs = playlistDAO.getSongsNumOfPlaylistOf(user.getUsername(), playlistName);
+            lastPage = numberOfSongs / 5;
+            playlistSongs = playlistDAO.getFiveSongsAtMost(user.getUsername(), playlistName, offset);
         } catch (SQLException e1) {
             e1.printStackTrace();
-        }
-        List<String> playlistSongs = null;
-        try {
-            playlistSongs = playlistDAO.getFiveSongsAtMost(user.getUsername(), playlistName, offset);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover playlist");
         }
 
         // now get the album name for each song
@@ -83,42 +80,29 @@ public class GetPlaylistDetails extends HttpServlet {
                 albumNames.add(songDAO.getSongDetails(user.getUsername(), ps).getAlbumName());
             } catch (SQLException e) {
                 e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover album name");
             }
         }
-
-        request.setAttribute("playlistSongs", playlistSongs);
-
-        request.setAttribute("page", page);
-
-        request.setAttribute("id", playlistName);
-
-        request.setAttribute("lastPage", lastPage);
-
-        request.setAttribute("albumNames", albumNames);
-
-        try {
-            numberOfSongs = playlistDAO.getSongsNumOfPlaylistOf(user.getUsername(), playlistName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        
         List<String> allUserSongs = null;
         try {
             allUserSongs = songDAO.getSongsOf(user.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         request.setAttribute("allUserSongs", allUserSongs);
+        request.setAttribute("playlistSongs", playlistSongs);
+        request.setAttribute("page", page);
+        request.setAttribute("id", playlistName);
+        request.setAttribute("lastPage", lastPage);
+        request.setAttribute("albumNames", albumNames);
 
+        // render page
         ServletContext servletContext = getServletContext();
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         ctx.setVariable("username", user.getUsername());
         ctx.setVariable("numberOfSongs", numberOfSongs);
-
         String path = "/WEB-INF/PlaylistDetails.html";
-
-        // render page
         templateEngine.process(path, ctx, response.getWriter());
 
     }

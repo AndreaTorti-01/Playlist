@@ -105,7 +105,7 @@ public class CreateSong extends HttpServlet {
         // check if the songs already exists
         try {
             if (songDAO.doesSongExist(title, owner)) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Song already exists");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Song already exists");
                 return;
             }
         } catch (SQLException e1) {
@@ -114,7 +114,7 @@ public class CreateSong extends HttpServlet {
 
         // check if the parameters are bad
         if (title.isEmpty() || author.isEmpty() || album.isEmpty() || genre.isEmpty() || albumYear > currentYear) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to upload song");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
             return;
         }
 

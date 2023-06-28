@@ -26,7 +26,6 @@ public class GetPlayerPage extends HttpServlet {
 
     public GetPlayerPage() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -49,14 +48,25 @@ public class GetPlayerPage extends HttpServlet {
         User user = (User) request.getSession().getAttribute("user");
 
         String userAndSong = request.getPathInfo().substring(1); // Extract the file name from the request URL
+
+        if (userAndSong.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+            return;
+        }
+
+        if (!userAndSong.contains("/")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+            return;
+        }
+
         String songName = userAndSong.substring(userAndSong.indexOf('/') + 1);
 
         Song song = null;
         try {
             song = songDAO.getSongDetails(user.getUsername(), songName);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover song details");
         }
 
         ServletContext servletContext = getServletContext();

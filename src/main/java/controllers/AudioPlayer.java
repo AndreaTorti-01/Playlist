@@ -19,6 +19,15 @@ public class AudioPlayer extends HttpServlet {
             throws IOException {
 
         String audioFileName = request.getPathInfo().substring(1); // Extract the file name from the request URL
+
+        if (audioFileName.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to upload cover");
+        }
+
+        if (audioFileName.contains("%20")) {
+            audioFileName = audioFileName.replace("%20", " ");
+        }
+
         String audioFilePath = "C:/userSongs/" + audioFileName;
 
         File audioFile = new File(audioFilePath);

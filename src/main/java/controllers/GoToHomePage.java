@@ -53,6 +53,7 @@ public class GoToHomePage extends HttpServlet {
             userSongs = new SongDAO(connection).getSongsOf(user.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover songs");
         }
         request.setAttribute("userSongs", userSongs);
 
@@ -62,6 +63,7 @@ public class GoToHomePage extends HttpServlet {
             userPlaylists = new PlaylistDAO(connection).getPlaylistsOf(user.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover playlists");
         }
         request.setAttribute("userPlaylists", userPlaylists);
 

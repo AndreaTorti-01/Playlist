@@ -44,7 +44,7 @@ public class CreatePlaylist extends HttpServlet {
         String playlistName = StringEscapeUtils.escapeJava(request.getParameter("playlistName"));
 
         if (playlistName.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No name given");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No name given");
             return;
         }
 

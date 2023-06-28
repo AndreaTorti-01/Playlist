@@ -44,7 +44,7 @@ public class AddSong extends HttpServlet {
         String newSong = StringEscapeUtils.escapeJava(request.getParameter("newSong"));
 
         if (playlistName.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No name given");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No name given");
             return;
         }
 
@@ -94,7 +94,7 @@ public class AddSong extends HttpServlet {
             }
         } else {
             // no songs selected
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No songs selected");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No songs selected");
             return;
         }
 
