@@ -1,0 +1,95 @@
+/* Solarized Dark Palette */
+:root {
+    --base03: #002b36;
+    --base02: #073642;
+    --base01: #586e75;
+    --base00: #657b83;
+    --base0: #839496;
+    --base1: #93a1a1;
+    --base2: #eee8d5;
+    --base3: #fdf6e3;
+    --yellow: #b58900;
+    --orange: #cb4b16;
+    --red: #dc322f;
+    --magenta: #d33682;
+    --violet: #6c71c4;
+    --blue: #268bd2;
+    --cyan: #2aa198;
+    --green: #859900;
+}
+
+/* properties valid for all elements */
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #002b36;
+    color: #fdf6e3;
+    margin: 0;
+    padding: 1em;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5em;
+}
+
+h1 {
+    margin: 0;
+    color: #b58900;
+    width: 80%;
+    text-align: center;
+}
+
+form {
+    background-color: #073642;
+    border-radius: 0.4em;
+    padding: 1em;
+    height: 100%;
+    max-width: 30em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1em;
+    justify-content: flex-start;
+    box-shadow: 0px 0px 10px 2px #586e75;
+    width: 80%;
+    height: auto;
+}
+
+input {
+    width: 80%;
+    padding: 0.5em 0.7em;
+    background-color: #073642;
+    color: #fdf6e3;
+    outline: none;
+    border: 0.05em solid #839496;
+    border-radius: 0.2em;
+}
+
+input:focus {
+    background-color: #002b36;
+    border: 0.05em solid #cb4b16;
+    transition: 0.2s ease-in-out;
+}
+
+input[type="submit"] {
+    background-color: #2aa198;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #268bd2;
+}
+
+.error {
+    font-family: "Lucida Grande", monospace;
+    color: #dc322f;
+    font-size: 1.2em;
+    font-weight: bold;
+}

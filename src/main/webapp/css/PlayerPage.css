@@ -1,0 +1,54 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #002b36;
+    color: #839496;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #93a1a1;
+}
+
+.flexCenterHor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.flexCenterHor > div {
+    margin-bottom: 10px;
+    color: #839496;
+}
+
+a {
+    color: #268bd2;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #2aa198;
+}
+
+audio {
+    width: 100%;
+    max-width: 600px;
+}
+
+.audio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+}

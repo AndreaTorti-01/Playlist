@@ -19,7 +19,7 @@ public class LoginChecker implements Filter {
         // Exclude index.html from filtering
         String reqUrl = req.getRequestURI();
         if (reqUrl.endsWith(loginPath)
-                || reqUrl.endsWith("css/app.css")
+                || reqUrl.endsWith(".css")
                 || reqUrl.endsWith("favicon.ico")
                 || reqUrl.endsWith(".js")
                 || reqUrl.endsWith("CheckLogin")

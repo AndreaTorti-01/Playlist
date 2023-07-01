@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Home Page</title>
     <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
-    <link media="all" rel="stylesheet" th:href="@{/css/app.css}" type="text/css"/>
+    <link media="all" rel="stylesheet" th:href="@{/css/Home.css}" type="text/css"/>
 </head>
 <body>
 <h1>Welcome to the Home Page</h1>
@@ -20,10 +20,6 @@
 
     <form action="UploadSong" enctype="multipart/form-data" method="POST">
         <div class="formPrompt">Use this form to upload a new song</div>
-        <div class="horDivBox">
-            <div class="smolText">Upload the song audio file:</div>
-            <input accept="audio/mpeg" name="songFile" required type="file">
-        </div>
 
         <select name="genre" required>
             <option disabled selected value="">Select Genre</option>
@@ -36,12 +32,20 @@
         <input name="album" placeholder="Album Title" required type="text">
         <input min="1000" name="albumYear" placeholder="Publication Year" required th:max="${currentYear}"
                type="number">
+
+        <div class="horDivBox">
+            <div class="smolText">Upload the song audio file:</div>
+            <input accept="audio/mpeg" name="songFile" required type="file">
+        </div>
+
         <div class="horDivBox">
             <div class="smolText">Upload the album cover image:</div>
             <input accept="image/*" name="imageFile" required type="file">
         </div>
+        
         <!-- another way of doing it... -->
         <!-- <input type="number" name="albumYear" placeholder="Publication Year" min="1000" th:max="${#dates.format(#dates.createNow(), 'yyyy')}" required> -->
+
         <input type="submit" value="Upload">
     </form>
 
