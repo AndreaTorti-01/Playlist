@@ -66,6 +66,9 @@ public class GetPlaylistDetails extends HttpServlet {
         try {
             numberOfSongs = playlistDAO.getSongsNumOfPlaylistOf(user.getUsername(), playlistName);
             lastPage = numberOfSongs / 5;
+            if (numberOfSongs % 5 == 0) {
+                lastPage--;
+            }
             playlistSongs = playlistDAO.getFiveSongsAtMost(user.getUsername(), playlistName, offset);
         } catch (SQLException e1) {
             e1.printStackTrace();
