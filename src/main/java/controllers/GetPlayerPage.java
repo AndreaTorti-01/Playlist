@@ -73,12 +73,19 @@ public class GetPlayerPage extends HttpServlet {
         final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 
         ctx.setVariable("userAndSong", userAndSong);
-        assert song != null;
-        ctx.setVariable("songTitle", song.getTitle());
-        ctx.setVariable("songAuthor", song.getAuthorName());
-        ctx.setVariable("songAlbum", song.getAlbumName());
-        ctx.setVariable("songGenre", song.getGenre());
-        ctx.setVariable("songAlbumYear", song.getAlbumYear());
+        if (song != null) {
+            ctx.setVariable("songTitle", song.getTitle());
+            ctx.setVariable("songAuthor", song.getAuthorName());
+            ctx.setVariable("songAlbum", song.getAlbumName());
+            ctx.setVariable("songGenre", song.getGenre());
+            ctx.setVariable("songAlbumYear", song.getAlbumYear());
+        } else {
+            ctx.setVariable("songTitle", "Song not found");
+            ctx.setVariable("songAuthor", "Song not found");
+            ctx.setVariable("songAlbum", "Song not found");
+            ctx.setVariable("songGenre", "Song not found");
+            ctx.setVariable("songAlbumYear", "Song not found");
+        }
 
         String path = "/WEB-INF/PlayerPage.html";
 

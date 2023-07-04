@@ -14,7 +14,7 @@ public class LoginChecker implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String loginPath = "index.html";
+        String loginPath = "/Playlist/index.html";
 
         // Exclude index.html from filtering
         String reqUrl = req.getRequestURI();
