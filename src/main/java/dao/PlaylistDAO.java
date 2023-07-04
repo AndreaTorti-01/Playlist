@@ -39,7 +39,7 @@ public class PlaylistDAO {
 
         } catch (SQLException e) {
             connection.rollback(); // transaction block abort
-            System.out.println("Errore nella creazione della playlist");
+            System.out.println("Error while creating the playlist");
         } finally {
             connection.setAutoCommit(true); // transaction block end
             if (preparedStatement != null)
