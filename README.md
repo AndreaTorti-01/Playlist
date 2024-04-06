@@ -1,4 +1,4 @@
-# TIW-2023-Playlist
+# Playlist Website - Thin Client Edition
 
 ![unnamed](https://github.com/AndreaTorti-01/Playlist/assets/74457299/53cf308b-47c5-4829-8a18-ef31e5406f2d)
 ![unnamed (2)](https://github.com/AndreaTorti-01/Playlist/assets/74457299/42bdf935-a1d8-4f1a-a51d-b3b01769df7b)
